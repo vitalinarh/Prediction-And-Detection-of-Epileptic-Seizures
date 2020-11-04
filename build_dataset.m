@@ -38,4 +38,20 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     for i = 1 : length(T)
        T2(i, T(i)) = 1; 
     end
+    
+    %% REDUCE THE NUMBER OF FEATURES using an autoencoder
+    X = data.FeatVectSel;
+    hiddenSize = 3;
+    autoenc1 = trainAutoencoder(X(1:10000,:).', hiddenSize, ...
+    'MaxEpochs', 400, ...
+    'L2WeightRegularization',0.004, ...
+    'SparsityRegularization',4, ...
+    'SparsityProportion',0.15, ...
+    'ScaleData', false); 
+    
+    feat1 = encode(autoenc1, X.');
+   
+    feat1 = feat1.';
+    
+    scatter3(feat1(:, 1), feat1(:, 2), feat1(:, 3))
 end
