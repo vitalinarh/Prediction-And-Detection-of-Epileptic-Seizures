@@ -41,17 +41,36 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     %% REDUCE THE NUMBER OF FEATURES using an autoencoder
     X = data.FeatVectSel;
-    hiddenSize = 3;
-    autoenc1 = trainAutoencoder(X(1:10000,:).', hiddenSize, ...
-    'MaxEpochs', 400, ...
-    'L2WeightRegularization',0.004, ...
-    'SparsityRegularization',4, ...
-    'SparsityProportion',0.15, ...
-    'ScaleData', false); 
+    if features < 29
+        hiddenSize = features;
+        autoenc1 = trainAutoencoder(X(1 : 10000, :).', hiddenSize, ...
+        'MaxEpochs', 400, ...
+        'L2WeightRegularization',0.004, ...
+        'SparsityRegularization',4, ...
+        'SparsityProportion',0.15, ...
+        'ScaleData', false); 
+        feat1 = encode(autoenc1, X.');
+        P = feat1.';
+    else
+        P = data.FeatVectSel;
+    end 
     
-    feat1 = encode(autoenc1, X.');
+    %% Define the Training set and the Testing set
+    
+    % Last index of the last posictal instance
+    posictal = find(T2(:, 4) == 1);
+    last_index = posictal(end);
+        
+    % Keep only data before that instance
+    P = P(1 : last_index, :);
+    Q = length(P);
+    
+    test_ratio =  1 - train_ratio;
+    [trainInd, testInd] = divideblock(Q, train_ratio, test_ratio);
    
-    feat1 = feat1.';
-    
-    scatter3(feat1(:, 1), feat1(:, 2), feat1(:, 3))
+    P_train = P(trainInd, :)';
+    T_train = T2(trainInd, :)';
+        
+    P_test = P(testInd, :)';
+    T_test = T2(testInd, :)';
 end
