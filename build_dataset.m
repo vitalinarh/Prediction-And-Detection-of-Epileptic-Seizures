@@ -19,17 +19,12 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % 900 points before the first 1 for each 
                                                           % seizure, corresponding to 900 seconds=15 minutes.
-    ictal_idx_length = length(ictal_indices);
     % Run through all indices
-    for i = 2 : ictal_idx_length
+    for i = 2 : length(ictal_indices)
         before_idx = ictal_indices(i - 1);
         current_index = ictal_indices(i);
-        % different seizure in time (cur_idx is the beginning of the next
-        % seizure and the before_idx the end of the previous seizure
-        if current_index - before_idx > 1 
-            T(current_index - 900 : current_index - 1) = 2; % pre-ictal
-            T(before_idx + 1 : before_idx + 301) = 4; % pos-ictal
-        end 
+        T(current_index - 900 : current_index - 1) = 2; % pre-ictal
+        T(before_idx + 1 : before_idx + 301) = 4; % pos-ictal
     end
     
     T(current_index + 1 : current_index + 301) = 4;       % Take care of the last seizure, posictal not changed in the loop
