@@ -4,14 +4,16 @@ function nn = training(P_train, T_train, type, neurons, goal)
     
     if strcmp(type, "Multilayer") == 0
         net = feedforwardnet(neurons);
+    else
+        net = feedforwardnet(neurons);
     end
     
     net.divideFcn = 'divideblock';
     net.divideParam.trainRatio = 0.90;
     net.divideParam.valRatio = 0.10;
-    net.divideParam.testRatio = 0;  
+    net.divideParam.testRatio = 0; 
     net.trainFcn = 'traingd';
     net.trainParam.epochs = 1000;
-    nn = train(net, P_train, T_train, [],[], weights_penalization);
+    nn = train(net, P_train, T_train);
     
 end

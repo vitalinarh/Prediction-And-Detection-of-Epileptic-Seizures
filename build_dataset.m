@@ -1,4 +1,4 @@
-function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio)
+function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio, balance)
 
     %% LOAD DATASET
     %  PATIENT 1
@@ -19,13 +19,17 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % 900 points before the first 1 for each 
                                                           % seizure, corresponding to 900 seconds=15 minutes.
-    
+    ictal_idx_length = length(ictal_indices);
     % Run through all indices
-    for i = 2 : length(ictal_indices)
-        ant_index = ictal_indices(i - 1);
-        current_index = ictal_indices(i);                 
-        T(ant_index + 1 : ant_index + 301) = 4;           % the postictal points are those 300 after the last 1 of each seizure (5 minutes).
-        T(current_index - 900 : current_index - 1) = 2;   % 900 points before the first 1 for each  seizure, corresponding to 900 seconds=15 minutes.
+    for i = 2 : ictal_idx_length
+        before_idx = ictal_indices(i - 1);
+        current_index = ictal_indices(i);
+        % different seizure in time (cur_idx is the beginning of the next
+        % seizure and the before_idx the end of the previous seizure
+        if current_index - before_idx > 1 
+            T(current_index - 900 : current_index - 1) = 2; % pre-ictal
+            T(before_idx + 1 : before_idx + 301) = 4; % pos-ictal
+        end 
     end
     
     T(current_index + 1 : current_index + 301) = 4;       % Take care of the last seizure, posictal not changed in the loop
@@ -55,22 +59,26 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = data.FeatVectSel;
     end 
     
+    % P = reduce_dataset(data.FeatVectSel, data.Trg, features);
+    
     %% Define the Training set and the Testing set
     
     % Last index of the last posictal instance
-    posictal = find(T2(:, 4) == 1);
+    posictal = find(T2(:,4) == 1);
     last_index = posictal(end);
         
     % Keep only data before that instance
     P = P(1 : last_index, :);
     Q = length(P);
-    
+    % valRatio = 0; % No validation data
     test_ratio =  1 - train_ratio;
-    [trainInd, testInd] = divideblock(Q, train_ratio, test_ratio);
-   
+    [trainInd,testInd] = divideblock(Q, train_ratio, test_ratio);
+        
+    % Define the training set
     P_train = P(trainInd, :)';
     T_train = T2(trainInd, :)';
         
+    % Define the test set
     P_test = P(testInd, :)';
     T_test = T2(testInd, :)';
 end
