@@ -54,8 +54,6 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = data.FeatVectSel;
     end 
     
-    % P = reduce_dataset(data.FeatVectSel, data.Trg, features);
-    
     %% Define the Training set and the Testing set
     
     % Last index of the last posictal instance
