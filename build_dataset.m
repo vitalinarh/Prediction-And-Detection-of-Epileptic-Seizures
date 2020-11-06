@@ -42,6 +42,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     X = data.FeatVectSel;
     if features < 29
         hiddenSize = features;
+        % Note that we use X(1 : 10000) because the original dataset is too big so we use only a part of it
         autoenc1 = trainAutoencoder(X(1 : 10000, :).', hiddenSize, ...
         'MaxEpochs', 400, ...
         'L2WeightRegularization',0.004, ...
@@ -54,26 +55,24 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = data.FeatVectSel;
     end 
     
-    % P = reduce_dataset(data.FeatVectSel, data.Trg, features);
-    
     %% Define the Training set and the Testing set
     
-    % Last index of the last posictal instance
-    posictal = find(T2(:,4) == 1);
+    % Find last posictal instance
+    posictal = find(T2(:, 4) == 1);
     last_index = posictal(end);
         
-    % Keep only data before that instance
+    % Save data until that instance, we don't need the rest
     P = P(1 : last_index, :);
     Q = length(P);
-    % valRatio = 0; % No validation data
+
     test_ratio =  1 - train_ratio;
     [trainInd,testInd] = divideblock(Q, train_ratio, test_ratio);
         
-    % Define the training set
+    % Training set
     P_train = P(trainInd, :)';
     T_train = T2(trainInd, :)';
         
-    % Define the test set
+    % Test set
     P_test = P(testInd, :)';
     T_test = T2(testInd, :)';
 end
