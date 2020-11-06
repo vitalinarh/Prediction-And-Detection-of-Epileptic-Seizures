@@ -1,4 +1,4 @@
-function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio, balance)
+function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio)
 
     %% LOAD DATASET
     %  PATIENT 1
