@@ -1,4 +1,4 @@
-function nn = training(P_train, T_train, type, neurons, goal)
+function nn = training(P_train, T_train, type, neurons, is_prediction)
     
     %% Configure Network
     
