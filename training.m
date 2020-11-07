@@ -12,7 +12,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction)
         net.trainFcn = 'trainb';
         net.trainFcn = 'traingd';
         net.trainParam.epochs = 1000;
-        nn = train(net, P_train, T_train);
+        nn = train(net, P_train, T_train, 'UseParallel', 'no', 'UseGPU', 'no');
     elseif strcmp(type, "Recurrent")
         disp("Recurrent")
         net.trainFcn = 'trainb';
