@@ -1,4 +1,4 @@
-function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio, classes)
+function [P_train, P_test, T_train, T_test] = build(dataset, features, train_ratio, classes, class_balancing)
 
     %% LOAD DATASET
     %  PATIENT 1
@@ -73,19 +73,24 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     else
         [last_index,] = size(P);
     end
-        
-    % Save data until that instance, we don't need the rest
-    P = P(1 : last_index, :);
-    Q = length(P);
+    
+    if class_balancing == 1
+        disp("cb")
+    % No Class Balancing
+    else
+        % Save data until that instance, we don't need the rest
+        P = P(1 : last_index, :);
+        Q = length(P);
 
-    test_ratio =  1 - train_ratio;
-    [trainInd,testInd] = divideblock(Q, train_ratio, test_ratio);
-        
-    % Training set
-    P_train = P(trainInd, :)';
-    T_train = T2(trainInd, :)';
-        
-    % Test set
-    P_test = P(testInd, :)';
-    T_test = T2(testInd, :)';
+        test_ratio =  1 - train_ratio;
+        [trainInd,testInd] = divideblock(Q, train_ratio, test_ratio);
+
+        % Training set
+        P_train = P(trainInd, :)';
+        T_train = T2(trainInd, :)';
+
+        % Test set
+        P_test = P(testInd, :)';
+        T_test = T2(testInd, :)';
+    end
 end

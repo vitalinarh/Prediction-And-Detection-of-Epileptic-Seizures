@@ -3,6 +3,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction)
     %% Configure Network
     
     if strcmp(type, "Multilayer")
+        disp("Multilayer")
         net = feedforwardnet(neurons);
         net.divideFcn = 'divideblock';
         net.divideParam.trainRatio = 0.90;
