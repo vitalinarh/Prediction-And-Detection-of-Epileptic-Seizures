@@ -13,12 +13,15 @@ function nn = training(P_train, T_train, type, neurons, is_prediction)
         net.trainFcn = 'traingd';
         net.trainParam.epochs = 1000;
         nn = train(net, P_train, T_train, 'UseParallel', 'no', 'UseGPU', 'no');
+        
     elseif strcmp(type, "Recurrent")
         disp("Recurrent")
         net.trainFcn = 'trainb';
         net = layrecnet(1 : 2, neurons, "traingd");
-        net.divideFcn = 'divideind';
-        [net.divideParam.trainInd, ~, ~] = divideind(length(P_train), 1:length(P_train), [],[]);
+        net.divideFcn = 'divideblock';
+        net.divideParam.trainRatio = 0.90;
+        net.divideParam.valRatio = 0.10;
+        net.divideParam.testRatio = 0;
         net.trainParam.epochs = 1000;
         nn = train(net, P_train, T_train, [], [], 'useParallel','no', 'useGPU', 'no', 'showResources', 'no');
     end
