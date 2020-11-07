@@ -17,32 +17,27 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     ictal_indices = find(T == 1); % Get indices of 1's, Ictal indices
     
-    if classes == 4
-        T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % 900 points before the first 1 for each 
+    T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % 900 points before the first 1 for each 
                                                               % seizure, corresponding to 900 seconds = 15 minutes.
-        % Run through all indices
-        for i = 2 : length(ictal_indices)
-           before_idx = ictal_indices(i - 1);
-           current_index = ictal_indices(i);
-           T(current_index - 900 : current_index - 1) = 2; % pre-ictal
-           T(before_idx + 1 : before_idx + 301) = 4; % pos-ictal
-        end
-        
+    % Run through all indices
+    for i = 2 : length(ictal_indices)
+       before_idx = ictal_indices(i - 1);
+       current_index = ictal_indices(i);
+       T(current_index - 900 : current_index - 1) = 2; % pre-ictal
+       T(before_idx + 1 : before_idx + 301) = 4; % pos-ictal
+    end
+    
+    classes
+    if classes == 4
         T(current_index + 1 : current_index + 301) = 4;       % Take care of the last seizure, posictal not changed in the loop
 
-        T(T == 1) = 3; % Ictal, change 1 to 3
+    T(T == 1) = 3; % Ictal, change 1 to 3
         T(T == 0) = 1; % Interictal, rest of 0 values is 1
 
         % Perform transformation from one column to four columns for each class
         T2 = zeros(length(T), 4);
-        
-    elseif classes == 2
-        T(T == 1) = 1; % Ictal
-        T(T == 0) = 2; % Non-ictal
-        
-        T2 = zeros(length(T), 2);
     end
-
+    
     for i = 1 : length(T)
        T2(i, T(i)) = 1; 
     end
@@ -67,12 +62,8 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     %% Define the Training set and the Testing set
     
     % Find last posictal instance
-    if classes == 4
-        posictal = find(T2(:, 4) == 1);
-        last_index = posictal(end);
-    else
-        [last_index,] = size(P);
-    end
+    posictal = find(T2(:, 4) == 1);
+    last_index = posictal(end);
         
     % Save data until that instance, we don't need the rest
     P = P(1 : last_index, :);
