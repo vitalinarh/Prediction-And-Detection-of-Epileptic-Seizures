@@ -75,7 +75,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     end
     
     if class_balancing == 1
-        disp("cb")
+        %% TO DO
     % No Class Balancing
     else
         % Save data until that instance, we don't need the rest
