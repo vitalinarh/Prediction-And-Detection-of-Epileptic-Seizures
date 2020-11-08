@@ -12,16 +12,16 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     [~, rows] = size(res)
     
     for i = 1 : rows
-        max = 1;
+        max_ind = 1;
         for j = 1 : 4
-            if(res(j, i) >= res(max, i))
-                max = j;
+            if(res(j, i) >= res(max_ind, i))
+                max_ind = j;
             end
         end
         for j = 1 : 4
             res(j, i) = 0
         end
-        res(max, i) = 1; 
+        res(max_ind, i) = 1; 
     end
     
     %% Calculate the results
