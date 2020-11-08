@@ -6,7 +6,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     %% Post Processing
     % The prediction goes for the max value, so we change it to 1 and the rest is 0's
     % Go through all the results, one by one and in each iteration see
-    % which class has the highest vallue, then assign 1 to it, the rest is
+    % which class has the highest value, then assign 1 to it, the rest is
     % 0's
     for i = 1 : length(res)
         max = 1;
@@ -77,7 +77,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
         end
     end
     
-    % Perform the calculations
+    %% Perform the calculations
     % Sensitivity
     prediction_results.sensitivity = prediction_results.true_positives / (prediction_results.true_positives + prediction_results.false_negatives);
     % Specificity

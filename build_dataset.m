@@ -47,12 +47,14 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
        T2(i, T(i)) = 1; 
     end
     
+    size(find(T2(:, 4) == 1))
+    
     %% REDUCE THE NUMBER OF FEATURES using an autoencoder
     X = data.FeatVectSel;
     if features < 29
         hiddenSize = features;
         % Note that we use X(1 : 10000) because the original dataset is too big so we use only a part of it
-        autoenc1 = trainAutoencoder(X(1 : 10000, :).', hiddenSize, ...
+        autoenc1 = trainAutoencoder(X(1 : 20000, :).', hiddenSize, ...
         'MaxEpochs', 400, ...
         'L2WeightRegularization',0.004, ...
         'SparsityRegularization',4, ...
@@ -76,7 +78,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     if class_balancing == 1
         %% TO DO
-    
+        
     % No Class Balancing
     else
         % Save data until that instance, we don't need the rest
