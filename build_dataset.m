@@ -18,7 +18,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     ictal_indices = find(T == 1); % Get indices of 1's, Ictal indices
     
     if classes == 4
-        T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % 900 points before the first 1 for each 
+        T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % pre-ictal, 900 points before the first 1 for each 
                                                               % seizure, corresponding to 900 seconds = 15 minutes.
         % Run through all indices
         for i = 2 : length(ictal_indices)
@@ -76,6 +76,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     if class_balancing == 1
         %% TO DO
+    
     % No Class Balancing
     else
         % Save data until that instance, we don't need the rest
