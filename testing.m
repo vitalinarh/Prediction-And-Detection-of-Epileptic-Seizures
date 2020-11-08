@@ -9,7 +9,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     % which class has the highest value, then assign 1 to it, the rest is
     % 0's
     
-    [~, rows] = size(res)
+    [~, rows] = size(res);
     
     for i = 1 : rows
         max_ind = 1;
@@ -19,7 +19,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
             end
         end
         for j = 1 : 4
-            res(j, i) = 0
+            res(j, i) = 0;
         end
         res(max_ind, i) = 1; 
     end
