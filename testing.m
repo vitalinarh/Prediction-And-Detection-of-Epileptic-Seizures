@@ -8,14 +8,19 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     % Go through all the results, one by one and in each iteration see
     % which class has the highest value, then assign 1 to it, the rest is
     % 0's
-    for i = 1 : length(res)
+    
+    [~, rows] = size(res)
+    
+    for i = 1 : rows
         max = 1;
         for j = 1 : 4
             if(res(j, i) >= res(max, i))
                 max = j;
             end
         end
-        res(:, i) = zeros(4, 1);
+        for j = 1 : 4
+            res(j, i) = 0
+        end
         res(max, i) = 1; 
     end
     
