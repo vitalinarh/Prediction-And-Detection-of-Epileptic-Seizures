@@ -1,23 +1,82 @@
 function [prediction_results, detection_results]  = testing(nn, P_test, T_test, classification)
 
     res = sim(nn, P_test);
-    res
     
+    % The prediction goes for the max value, so we change it to 1 and the rest is 0's
+    % Go through all the results, one by one and in each iteration see
+    % which class has the highest vallue, then assign 1 to it, the rest is
+    % 0's
+    for i = 1 : length(res)
+        max = 1;
+        for j = 1 : 4
+            if(res(j, i) >= res(max, i))
+                max = j;
+            end
+        end
+        res(:, i) = zeros(4, 1);
+        res(max, i) = 1; 
+    end
     
-    prediction_results.TP = 0;
-    prediction_results.TN = 0;
-    prediction_results.FP = 0;
-    prediction_results.FN = 0;
+    %% Calculate the ressults
+    % Setup the prediction results and the detection results
+    prediction_results.true_positives = 0;
+    prediction_results.true_negatives = 0;
+    prediction_results.false_positives = 0;
+    prediction_results.false_negatives = 0;
     prediction_results.sensitivity = 0;
     prediction_results.specificity = 0;
     prediction_results.accuracy = 0;
     
-    detection.TP = 0;
-    detection.TN = 0;
-    detection.FP = 0;
-    detection.FN = 0;
-    detection.sensitivity = 0;
-    detection.specificity = 0;
-    detection.accuracy = 0;
+    detection_results.true_positives = 0;
+    detection_results.true_negatives = 0;
+    detection_results.false_positives = 0;
+    detection_results.false_negatives = 0;
+    detection_results.sensitivity = 0;
+    detection_results.specificity = 0;
+    detection_results.accuracy = 0;
+    
+    % Perform the calculations
+    for i = 1 : length(res)
+        % Prediction
+        if(res(2, i) == T_test(2, i))
+            % If the result of the trained network got the preictal point right, it is a
+            % true positive
+            if(res(2, i) == 1)
+                prediction_results.true_positives = prediction_results.true_positives + 1;
+            % If it isn't a 
+            else
+                prediction_results.true_negatives = prediction_results.true_negatives + 1;
+            end
+        else
+            if(res(2, i) == 1)
+                prediction_results.false_positives = prediction_results.false_positives + 1;
+            else
+                prediction_results.false_negatives = prediction_results.false_negatives + 1;
+            end
+        end
+        % Detection
+        if(res(3, i) == T_test(3, i))
+            if(res(3, i) == 1)
+                detection_results.true_positives = detection_results.true_positives + 1;
+            else
+                detection_results.true_negatives = detection_results.true_negatives + 1;
+            end
+        else
+            if(res(3, i) == 1)
+                detection_results.false_positives = detection_results.false_positives + 1;
+            else
+                detection_results.false_negatives = detection_results.false_negatives + 1;
+            end
+        end
+    end
+    
+    prediction_results.sensitivity = prediction_results.true_positives / (prediction_results.true_positives + prediction_results.false_negatives);
+    prediction_results.specificity = prediction_results.true_negatives / (prediction_results.true_negatives + prediction_results.false_positives);
+    prediction_results.accuracy = (prediction_results.true_positives + prediction_results.true_negatives) / (prediction_results.true_positives + prediction_results.true_negatives + prediction_results.false_positives + prediction_results.false_negatives);
+    
+    detection_results.sensitivity = detection_results.true_positives / (detection_results.true_positives + detection_results.false_negatives);
+    detection_results.specificity = detection_results.true_negatives / (detection_results.true_negatives + detection_results.false_positives);
+    detection_results.accuracy = (detection_results.true_positives + detection_results.true_negatives) / (detection_results.true_positives + detection_results.true_negatives + detection_results.false_positives + detection_results.false_negatives);
+    
     
 end
