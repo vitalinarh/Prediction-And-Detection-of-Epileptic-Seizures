@@ -37,8 +37,10 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     detection_results.specificity = 0;
     detection_results.accuracy = 0;
     
+    [rows, ~] = size(res);
+    
     % Perform the calculations
-    for i = 1 : length(res)
+    for i = 1 : rows
         % Prediction
         if(res(2, i) == T_test(2, i))
             % If the result of the trained network got the preictal point right, it is a
