@@ -37,7 +37,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     detection_results.specificity = 0;
     detection_results.accuracy = 0;
     
-    [rows, ~] = size(res);
+    [~, rows] = size(res);
     
     % Perform the calculations
     for i = 1 : rows
