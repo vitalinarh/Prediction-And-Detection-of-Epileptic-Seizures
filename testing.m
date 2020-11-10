@@ -53,7 +53,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
             if(res(2, i) == 1)
                 prediction_results.true_positives = prediction_results.true_positives + 1;
             % If it isn't a preictal point and the network got it right, it
-            % is a true negaative
+            % is a true negative
             else
                 prediction_results.true_negatives = prediction_results.true_negatives + 1;
             end
