@@ -26,9 +26,18 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         for i = 2 : length(ictal_indices)
            before_index = ictal_indices(i - 1);
            current_index = ictal_indices(i);
-           if current_index - before_index > 1
-                T(current_index - 900 : current_index - 1) = 2; % pre ictal instance
-                T(before_index + 1 : before_index + 301) = 4;   % pos ictal instance
+           for j = current_index - 900 : current_index - 1
+               % if not ictal instance
+               if T(j) == 0
+                   T(j) = 2;
+               end 
+           end  
+           
+           for j = before_index + 1 : before_index + 301
+               % if not ictal instance
+               if T(j) == 0
+                   T(j) = 4;
+               end 
            end
         end
         
