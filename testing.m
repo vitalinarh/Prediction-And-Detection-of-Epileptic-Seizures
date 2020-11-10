@@ -46,7 +46,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     
     % Perform the calculations
     for i = 1 : rows
-        % Prediction
+        % Prediction - 2nd Column
         if(res(2, i) == T_test(2, i))
             % If the result of the trained network got the preictal point right, it is a
             % true positive
@@ -91,12 +91,12 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     prediction_results.specificity = prediction_results.true_negatives / (prediction_results.true_negatives + prediction_results.false_positives);
     % Accuracy
     prediction_results.accuracy = (prediction_results.true_positives + prediction_results.true_negatives) / (prediction_results.true_positives + prediction_results.true_negatives + prediction_results.false_positives + prediction_results.false_negatives);
-    
+   
     % Sensitivity
     detection_results.sensitivity = detection_results.true_positives / (detection_results.true_positives + detection_results.false_negatives);
     % Specificity
     detection_results.specificity = detection_results.true_negatives / (detection_results.true_negatives + detection_results.false_positives);
-    % Accuracys
+    % Accuracy
     detection_results.accuracy = (detection_results.true_positives + detection_results.true_negatives) / (detection_results.true_positives + detection_results.true_negatives + detection_results.false_positives + detection_results.false_negatives);
     
     

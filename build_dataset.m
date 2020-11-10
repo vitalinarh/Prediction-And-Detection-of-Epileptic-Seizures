@@ -2,7 +2,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
 
     %% LOAD DATASET
     %  PATIENT 1
-    if strcmp(dataset, "Patient 1") == 0
+    if strcmp(dataset, "1") == 0
         data = load("Datasets/112502.mat");
     % PATIENT 2
     else
@@ -17,8 +17,6 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     ictal_indices = find(T == 1); % Get indices of 1's, Ictal indices
     
-    length(ictal_indices)
-    
     if classes == 4
         T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % pre-ictal, 900 points before the first 1 for each 
                                                               % seizure, corresponding to 900 seconds = 15 minutes.
@@ -27,19 +25,21 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
            before_index = ictal_indices(i - 1);
            current_index = ictal_indices(i);
            for j = current_index - 900 : current_index - 1
-               % if not ictal instance
+               % if not ictal instance, make it preictal
                if T(j) == 0
                    T(j) = 2;
                end 
            end  
            
            for j = before_index + 1 : before_index + 301
-               % if not ictal instance
+               % if not ictal instance, make it post ictal
                if T(j) == 0
                    T(j) = 4;
                end 
            end
         end
+        
+        length(find(T == 2))
         
         T(current_index + 1 : current_index + 301) = 4;       % Take care of the last seizure, posictal not changed in the loop
 
@@ -91,19 +91,10 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     if class_balancing == 1
         %% TO DO
-        count = 0
-        for i = 1 : length(T)
-            if T(i) == 3
-                count = count + 1;
-            end
-        end
-        
-        count
+
         
     % No Class Balancing
     else
-        % Save data until that instance, we don't need the rest
-        P = P(1 : last_index, :);
         Q = length(P);
 
         test_ratio =  1 - train_ratio;

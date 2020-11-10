@@ -1,0 +1,22 @@
+function nn = save_network(nn, patient, type, is_prediction, class_balancing, train_ratio, features, neurons)
+
+    train_ratio = int2str(train_ratio);
+    neurons = int2str(neurons);
+    features = int2str(features);
+    patient = int2str(patient);
+    
+    if class_balancing == 1
+        balance = 'Balance_On';
+    else
+        balance = 'Balance_Off';
+    end 
+    
+    if is_prediction
+        goal = 'prediction';
+    else
+        goal = 'detection';
+    end
+    
+    filename = strcat(goal,'_', type,'_', goal,'_', specialization,'_', training_data, '_', balance,'_', num_neurons, '_', num_features,'.mat');
+    
+end
