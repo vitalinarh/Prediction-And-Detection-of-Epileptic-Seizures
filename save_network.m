@@ -1,4 +1,4 @@
-function nn = save_network(nn, patient, type, is_prediction, class_balancing, train_ratio, features, neurons)
+function nn = save_network(nn, P_test, T_test, patient, type, is_prediction, class_balancing, train_ratio, features, neurons)
 
     train_ratio = int2str(train_ratio);
     neurons = int2str(neurons);
@@ -18,6 +18,6 @@ function nn = save_network(nn, patient, type, is_prediction, class_balancing, tr
     
     filename = strcat('p', patient, '_g', goal, '_t', type, '_cl', class_balancing, '_tr', train_ratio, '_n', neurons, '_f', features,'.mat');
     
-    save(filename, 'nn');
+    save(filename, 'nn', 'P_test', 'T_test');
     
 end
