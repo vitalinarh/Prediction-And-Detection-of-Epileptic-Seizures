@@ -18,19 +18,19 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         if strcmp(spec, 'None')
             error = 1;
         % give more importance to preictal instances
-        elseif strcmp(spec, 'On')
-            error = (interictal_total / preictal_total);        
+        else
+            error = (interictal_total - preictal_total) * 1.5;        
         end
         wp(preictal_indexes) = error;
     % Set up network error specialization for detection    
     else % Ictal (3) 
         if strcmp(spec, 'None')
             error = 1;
-        elseif strcmp(spec, 'On')
+        else
             if strcmp(class_balancing, 'Off')
-                error = (interictal_total / ictal_total) * (interictal_total - preictal_total);
+                error = (interictal_total - preictal_total) * 1.5;
             else
-                error = (interictal_total / ictal_total);
+                error = (interictal_total - preictal_total) * 1.5;
             end
         end
         wp(ictal_indexes) = error;
@@ -42,9 +42,8 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         disp("Multilayer")
         net = feedforwardnet(neurons);
         net.divideFcn = 'divideblock';
-        net.divideParam.trainRatio = 0.90;
-        net.divideParam.valRatio = 0.10;
-        net.divideParam.testRatio = 0; 
+        net.divideParam.trainRatio = 0.80;
+        net.divideParam.valRatio = 0.20; 
         net.trainFcn = 'trainb';
         net.trainFcn = 'traingd';
         net.trainParam.epochs = 1000;
