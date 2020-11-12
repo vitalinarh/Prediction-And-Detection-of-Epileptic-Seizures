@@ -3,14 +3,17 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     %% Treatment for Deep NN
     if strcmp(type, "LSTM")
         
+        P_test = num2cell(P_test, 1);
         miniBatchSize = 29;
-        TPred = classify(nn, P_test, ...
+        T_Pred = classify(nn, P_test, ...
             'MiniBatchSize', miniBatchSize, ...
             'SequenceLength', 'longest');
         
-        res = zeros(length(TPred), 4);
-        for i = 1 : length(res)
-            res(i, TPred(i)) = 1; 
+        size(T_Pred)
+        
+        res = zeros(length(T_Pred), 4);
+        for i = 1 : length(T_Pred)
+            res(i, T_Pred(i)) = 1;
         end
         
         res = res';
@@ -25,9 +28,9 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     % which class has the highest value, then assign 1 to it, the rest is
     % 0's
     
-    [~, rows] = size(res);
+    [~, col] = size(res);
     
-    for i = 1 : rows
+    for i = 1 : col
         max_ind = 1;
         for j = 1 : 4
             if(res(j, i) >= res(max_ind, i))
@@ -58,10 +61,10 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     detection_results.specificity = 0;
     detection_results.accuracy = 0;
     
-    [~, rows] = size(res);
+    [~, col] = size(res);
     
     % Perform the calculations
-    for i = 1 : rows
+    for i = 1 : col
         % Prediction - 2nd Column
         if(res(2, i) == T_test(2, i))
             % If the result of the trained network got the preictal point right, it is a

@@ -16,7 +16,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
     % Set up network error specialization for prediction, Preictal (2)
     if is_prediction 
         if strcmp(class_balancing, 'Off')
-            error = (interictal_total / preictal_total) * 5;
+            error = (interictal_total / preictal_total) * 1.5;
         else
             error = (interictal_total / preictal_total);
         end 
@@ -27,7 +27,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
             error = 1;
         else
             if strcmp(class_balancing, 'Off')
-                error = (interictal_total / ictal_total) * 5;
+                error = (interictal_total / ictal_total) * 1.5;
             else
                 error = (interictal_total / ictal_total);
             end
@@ -39,7 +39,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
     
     if strcmp(type, "Multilayer")
         disp("Multilayer")
-        net = feedforwardnet(neurons, 'trainscg');
+        net = feedforwardnet(neurons, 'traingd');
         net.divideFcn = 'divideblock';
         net.divideParam.trainRatio = 0.90;
         net.divideParam.valRatio = 0.10; 
@@ -49,7 +49,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
     elseif strcmp(type, "Recurrent")
         disp("Recurrent")
-        net.trainFcn = 'trainb';
+        net.trainFcn = 'traingd';
         net = layrecnet(1 : 2, neurons, "trainscg");
         net.divideFcn = 'divideblock';
         net.divideParam.trainRatio = 0.90;
