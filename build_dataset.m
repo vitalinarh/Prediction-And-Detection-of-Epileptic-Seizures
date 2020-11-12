@@ -76,6 +76,11 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = data.FeatVectSel;
     end 
     
+    size(find(T2(1, :) == 1))
+    size(find(T2(2, :) == 1))
+    size(find(T2(3, :) == 1))
+    size(find(T2(4, :) == 1))
+    
     %% Define the Training set and the Testing set
     
     % Find last posictal instance
