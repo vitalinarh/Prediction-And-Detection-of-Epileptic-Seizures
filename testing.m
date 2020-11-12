@@ -24,9 +24,9 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     % which class has the highest value, then assign 1 to it, the rest is
     % 0's
     
-    [~, rows] = size(res);
+    [~, col] = size(res);
     
-    for i = 1 : rows
+    for i = 1 : col
         max_ind = 1;
         for j = 1 : 4
             if(res(j, i) >= res(max_ind, i))
