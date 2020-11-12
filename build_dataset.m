@@ -17,7 +17,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     ictal_indices = find(T == 1); % Get indices of 1's, Ictal indices
     
-    if classes == 4
+    if classes == 3
         T(ictal_indices(1) - 900 : ictal_indices(1) - 1) = 2; % pre-ictal, 900 points before the first 1 for each 
                                                               % seizure, corresponding to 900 seconds = 15 minutes.
         % Run through all indices
@@ -39,14 +39,13 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
            end
         end
 
-        
         T(current_index + 1 : current_index + 301) = 4;       % Take care of the last seizure, posictal not changed in the loop
 
         T(T == 1) = 3; % Ictal, change 1 to 3
         T(T == 0) = 1; % Interictal, rest of 0 values is 1
 
         % Perform transformation from one column to four columns for each class
-        T2 = zeros(length(T), 4);
+        T2 = zeros(length(T), 3);
         
     elseif classes == 2
         T(T == 1) = 1; % Ictal
@@ -76,23 +75,11 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = data.FeatVectSel;
     end 
     
-    size(find(T2(1, :) == 1))
-    size(find(T2(2, :) == 1))
-    size(find(T2(3, :) == 1))
-    size(find(T2(4, :) == 1))
-    
+    size(find(T2(:, 1) == 1))
+    size(find(T2(:, 2) == 1))
+    size(find(T2(:, 3) == 1))
+
     %% Define the Training set and the Testing set
-    
-    % Find last posictal instance
-    if classes == 4
-        posictal = find(T2(:, 4) == 1);
-        last_index = posictal(end);
-    else
-        [last_index,] = size(P);
-    end
-    
-    
-    
     if class_balancing == 1
         %% TO DO
         [P_train, T_train, P_test, T_test] = class_balance(P, T2, data.Trg, train_ratio);
@@ -100,7 +87,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     % No Class Balancing
     else
         Q = length(P);
-
+        
         [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
 
         % Training set

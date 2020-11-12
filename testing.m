@@ -32,7 +32,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     
     for i = 1 : col
         max_ind = 1;
-        for j = 1 : 4
+        for j = 1 : 3
             if(res(j, i) >= res(max_ind, i))
                 max_ind = j;
             end

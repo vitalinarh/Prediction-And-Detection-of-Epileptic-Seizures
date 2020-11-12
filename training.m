@@ -56,7 +56,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         net.divideParam.valRatio = 0.10;
         net.divideParam.testRatio = 0;
         net.trainParam.epochs = 1000;
-        nn = train(net, P_train, T_train, [], [], 'useParallel', 'yes', 'useGPU', 'yes', 'showResources', 'no');
+        nn = train(net, P_train, T_train, [], [], 'useParallel', 'no', 'useGPU', 'no', 'showResources', 'no');
         
     elseif strcmp(type, "LSTM")
         % https://www.mathworks.com/help/deeplearning/ug/classify-sequence-data-using-lstm-networks.html   
@@ -68,12 +68,11 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         class1Ind = T_train(1, :) == 1;
         class2Ind = T_train(2, :) == 1;
         class3Ind = T_train(3, :) == 1;
-        class4Ind = T_train(4, :) == 1;
+        
         T_train = zeros(1, length(T_train)); 
         T_train(class1Ind) = 1;
         T_train(class2Ind) = 2;
         T_train(class3Ind) = 3;
-        T_train(class4Ind) = 4;
         
         % T_train is a categorical vector of labels.
         T_train = categorical(T_train)';
@@ -81,7 +80,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         % Set up the Network
         numFeatures = 29;
         numHiddenUnits = 100;
-        numClasses = 4;
+        numClasses = 3;
         miniBatchSize = 27;
         maxEpochs = 20;
         
