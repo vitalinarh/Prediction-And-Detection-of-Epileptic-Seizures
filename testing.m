@@ -1,8 +1,6 @@
 function [prediction_results, detection_results]  = testing(nn, P_test, T_test, classification, type)
-
-    %% Simulate the test
-    res = sim(nn, P_test);
         
+    %% Treatment for Deep NN
     if strcmp(type, "LSTM")
         
         miniBatchSize = 29;
@@ -16,6 +14,9 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
         end
         
         res = res';
+    else
+        %% Simulate the test normally
+        res = sim(nn, P_test);
     end
     
     %% Post Processing
