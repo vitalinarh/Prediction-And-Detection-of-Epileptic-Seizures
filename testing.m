@@ -1,7 +1,22 @@
-function [prediction_results, detection_results]  = testing(nn, P_test, T_test, classification)
+function [prediction_results, detection_results]  = testing(nn, P_test, T_test, classification, type)
 
     %% Simulate the test
     res = sim(nn, P_test);
+        
+    if strcmp(type, "LSTM")
+        
+        miniBatchSize = 29;
+        TPred = classify(nn, P_test, ...
+            'MiniBatchSize', miniBatchSize, ...
+            'SequenceLength', 'longest');
+        
+        res = zeros(length(TPred), 4);
+        for i = 1 : length(res)
+            res(i, TPred(i)) = 1; 
+        end
+        
+        res = res';
+    end
     
     %% Post Processing
     % The prediction goes for the max value, so we change it to 1 and the rest is 0's

@@ -59,7 +59,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         nn = train(net, P_train, T_train, [], [], 'useParallel', 'yes', 'useGPU', 'yes', 'showResources', 'no');
         
     elseif strcmp(type, "LSTM")
-         
+        % https://www.mathworks.com/help/deeplearning/ug/classify-sequence-data-using-lstm-networks.html   
         % Set up the cell arrays for training
         
         % create a 1-by-length(P_train) cell array, where each cell contains a 29-by-1 column of P_train.
