@@ -16,7 +16,7 @@ function nn = save_network(nn, P_test, T_test, patient, type, is_prediction, cla
         goal = 'Detection';
     end
     
-    filename = strcat('p', patient, '_g', goal, '_t', type, '_cl', class_balancing, '_tr', train_ratio, '_n', neurons, '_f', features,'.mat');
+    filename = strcat('p', patient, '_g', goal, '_t', type, '_cl', balance, '_tr', train_ratio, '_n', neurons, '_f', features,'.mat');
     
     save(filename, 'nn', 'P_test', 'T_test');
     

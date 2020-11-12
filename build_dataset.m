@@ -89,14 +89,14 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     
     if class_balancing == 1
         %% TO DO
-
+        [P_train, T_train, P_test, T_test] = class_balance(P, T2, data.Trg, train_ratio);
         
     % No Class Balancing
     else
         Q = length(P);
 
         test_ratio =  1 - train_ratio;
-        [trainInd,testInd] = divideblock(Q, train_ratio, test_ratio);
+        [trainInd, testInd] = divideblock(Q, train_ratio, test_ratio);
 
         % Training set
         P_train = P(trainInd, :)';
