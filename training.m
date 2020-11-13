@@ -104,6 +104,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
     else
         disp("CNN")
+        miniBatchSize = 29;
         
         layers = [
             imageInputLayer([29 29 1])
@@ -116,11 +117,12 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         ];
 
         options = trainingOptions('adam',...
+            'MiniBatchSize',miniBatchSize, ...
             'MaxEpochs',4, ...
             'Verbose',false, ...
             'Plots','training-progress');
 
-        nn = trainNetwork(P_train, layers, options);
+        nn = trainNetwork(P_train, T_train, layers, options);
 
     end
 end
