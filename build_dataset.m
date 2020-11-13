@@ -78,19 +78,30 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     %% Define the Training set and the Testing set
     if class_balancing == 1
         %% TO DO
-        [P_train, T_train, P_test, T_test] = class_balance(P, T2, data.Trg, train_ratio);
+        Q = length(P);
+
+        [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
+        
+        % Training set
+        P_train = P(trainInd, :);
+        T_train = T2(trainInd, :);
+        
+        % Test set
+        P_test = P(testInd, :)';
+        T_test = T2(testInd, :)';
+        
+        [P_train, T_train] = class_balance(P_train, T_train, data.Trg, train_ratio);
+        
+        P_train =  P_train';
+        T_train = T_train';
         
     % No Class Balancing
     else
         if train_ratio == 0
-            
-            Q = length(P);
-
-            [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
-
+           
             % Training set
-            P_train = P(trainInd, :)';
-            T_train = T2(trainInd, :)';
+            P_train = P(:, :)';
+            T_train = T2(:, :)';
 
             % Test set
             P_test = P';
