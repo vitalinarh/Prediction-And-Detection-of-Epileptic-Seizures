@@ -74,10 +74,6 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     else
         P = data.FeatVectSel;
     end 
-    
-    size(find(T2(:, 1) == 1))
-    size(find(T2(:, 2) == 1))
-    size(find(T2(:, 3) == 1))
 
     %% Define the Training set and the Testing set
     if class_balancing == 1
@@ -86,16 +82,27 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         
     % No Class Balancing
     else
-        Q = length(P);
-        
-        [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
+        if train_ratio == 0
+            
+            % Training set
+            P_train = [];
+            T_train = [];
+            
+            % Test set
+            P_test = P(:, :)';
+            T_test = T2(:, :)';
+        else
+            Q = length(P);
 
-        % Training set
-        P_train = P(trainInd, :)';
-        T_train = T2(trainInd, :)';
+            [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
 
-        % Test set
-        P_test = P(testInd, :)';
-        T_test = T2(testInd, :)';
+            % Training set
+            P_train = P(trainInd, :)';
+            T_train = T2(trainInd, :)';
+
+            % Test set
+            P_test = P(:, :)';
+            T_test = T2(:, :)';
+        end
     end
 end

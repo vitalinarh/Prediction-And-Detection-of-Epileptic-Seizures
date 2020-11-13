@@ -58,8 +58,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         net.trainParam.epochs = 1000;
         nn = train(net, P_train, T_train, [], [], 'useParallel', 'no', 'useGPU', 'no', 'showResources', 'no');
         
-    elseif strcmp(type, "LSTM")
-        % https://www.mathworks.com/help/deeplearning/ug/classify-sequence-data-using-lstm-networks.html   
+    elseif strcmp(type, "LSTM") 
         % Set up the cell arrays for training
         
         % create a 1-by-length(P_train) cell array, where each cell contains a 29-by-1 column of P_train.
@@ -80,7 +79,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         % Set up the Network
         numFeatures = 29;
         numHiddenUnits = 100;
-        numClasses = 3;
+        numClasses = 4;
         miniBatchSize = 27;
         maxEpochs = 20;
         
@@ -102,8 +101,26 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
                                 'Plots', 'training-progress');
                             
         nn = trainNetwork(P_train, T_train, layers, options); 
+        
     else
         disp("CNN")
+        
+        layers = [
+            imageInputLayer([29 29 1])
+            convolution2dLayer(5, 20)
+            reluLayer
+            maxPooling2dLayer(2, 'Stride', 2)
+            fullyConnectedLayer(3)
+            softmaxLayer
+            classificationLayer
+        ];
+
+        options = trainingOptions('adam',...
+            'MaxEpochs',4, ...
+            'Verbose',false, ...
+            'Plots','training-progress');
+
+        nn = trainNetwork(P_train, layers, options);
 
     end
 end

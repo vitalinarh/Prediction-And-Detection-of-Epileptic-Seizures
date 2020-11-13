@@ -127,17 +127,18 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
     end
     
     %% Perform the calculations
-    % Sensitivity, TP / (TP + FN)
+    % Sensitivity
     prediction_results.sensitivity = prediction_results.true_positives / (prediction_results.true_positives + prediction_results.false_negatives);
-    % Specificity, TN / (FP + TN)
+    % Specificity
     prediction_results.specificity = prediction_results.true_negatives / (prediction_results.true_negatives + prediction_results.false_positives);
-    % Accuracy, (TP + TN) / (TP + TN + FP + FN)
+    % Accuracy
     prediction_results.accuracy = (prediction_results.true_positives + prediction_results.true_negatives) / (prediction_results.true_positives + prediction_results.true_negatives + prediction_results.false_positives + prediction_results.false_negatives);
    
-    % Sensitivity, TP / (TP + FN)
+    % Sensitivity
     detection_results.sensitivity = detection_results.true_positives / (detection_results.true_positives + detection_results.false_negatives);
-    % Specificity, TN / (FP + TN)
+    % Specificity
     detection_results.specificity = detection_results.true_negatives / (detection_results.true_negatives + detection_results.false_positives);
-    % Accuracy, (TP + TN) / (TP + TN + FP + FN)
+    % Accuracy
     detection_results.accuracy = (detection_results.true_positives + detection_results.true_negatives) / (detection_results.true_positives + detection_results.true_negatives + detection_results.false_positives + detection_results.false_negatives);
+    
 end
