@@ -84,13 +84,18 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
     else
         if train_ratio == 0
             
+            Q = length(P);
+
+            [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
+
             % Training set
-            P_train = [];
-            T_train = [];
-            
+            P_train = P(trainInd, :)';
+            T_train = T2(trainInd, :)';
+
             % Test set
-            P_test = P(:, :)';
-            T_test = T2(:, :)';
+            P_test = P';
+            T_test = T2';
+            
         else
             Q = length(P);
 
@@ -101,8 +106,8 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
             T_train = T2(trainInd, :)';
 
             % Test set
-            P_test = P(:, :)';
-            T_test = T2(:, :)';
+            P_test = P(testInd, :)';
+            T_test = T2(testInd, :)';
         end
     end
 end
