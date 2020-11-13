@@ -46,8 +46,6 @@ function [P_train, T_train] = class_balance(P, T2, Trg, train_ratio)
         end
     end
     
-    
-    size(T_new2)
     P_train = P_new2(:, 1 : cols - 1);
     T_train = T_new2(:,:);
 end
