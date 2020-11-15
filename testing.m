@@ -22,6 +22,27 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
         res = sim(nn, P_test);
     end
     
+    %% Post Processing
+    % The prediction goes for the max value, so we change it to 1 and the rest is 0's
+    % Go through all the results, one by one and in each iteration see
+    % which class has the highest value, then assign 1 to it, the rest is
+    % 0's
+    
+    [~, col] = size(res);
+    
+    for i = 1 : col
+        max_ind = 1;
+        for j = 1 : 3
+            if(res(j, i) >= res(max_ind, i))
+                max_ind = j;
+            end
+        end
+        for j = 1 : 4
+            res(j, i) = 0;
+        end
+        res(max_ind, i) = 1; 
+    end
+    
     %% GROUPED CLASSIFICATION TREATMENT
     if strcmp(classification, 'Grouped')
         
@@ -43,27 +64,6 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
                 res(3, i) = 1;
             end
         end
-    end
-    
-    %% Post Processing
-    % The prediction goes for the max value, so we change it to 1 and the rest is 0's
-    % Go through all the results, one by one and in each iteration see
-    % which class has the highest value, then assign 1 to it, the rest is
-    % 0's
-    
-    [~, col] = size(res);
-    
-    for i = 1 : col
-        max_ind = 1;
-        for j = 1 : 3
-            if(res(j, i) >= res(max_ind, i))
-                max_ind = j;
-            end
-        end
-        for j = 1 : 4
-            res(j, i) = 0;
-        end
-        res(max_ind, i) = 1; 
     end
     
     %% Calculate the results

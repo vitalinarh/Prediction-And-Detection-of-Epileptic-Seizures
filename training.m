@@ -16,18 +16,18 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
     % Set up network error specialization for prediction, Preictal (2)
     if is_prediction 
         if strcmp(class_balancing, 'Off')
-            error = (interictal_total / preictal_total) * 1.5;
+            error = (interictal_total / preictal_total) * 2;
         else
             error = (interictal_total / preictal_total);
         end 
         wp(preictal_indexes) = error;
     % Set up network error specialization for detection, Ictal (3) 
-    else 
+    elseif is_prediction == false
         if strcmp(spec, 'None')
             error = 1;
         else
             if strcmp(class_balancing, 'Off')
-                error = (interictal_total / ictal_total) * 1.5;
+                error = (interictal_total / ictal_total) * 2;
             else
                 error = (interictal_total / ictal_total);
             end
@@ -49,7 +49,6 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
     elseif strcmp(type, "Recurrent")
         disp("Recurrent")
-        net.trainFcn = 'traingd';
         net = layrecnet(1 : 2, neurons, "trainscg");
         net.divideFcn = 'divideblock';
         net.divideParam.trainRatio = 0.90;
@@ -78,7 +77,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
        
         % Set up the Network
         numFeatures = 29;
-        numHiddenUnits = 100;
+        numHiddenUnits = 10;
         numClasses = 4;
         miniBatchSize = 27;
         maxEpochs = 20;
@@ -106,6 +105,17 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         disp("CNN")
         miniBatchSize = 29;
         
+        class1Ind = T_train(1, :) == 1;
+        class2Ind = T_train(2, :) == 1;
+        class3Ind = T_train(3, :) == 1;
+        
+        T_train = zeros(1, length(T_train)); 
+        T_train(class1Ind) = 1;
+        T_train(class2Ind) = 2;
+        T_train(class3Ind) = 3;
+        
+        T_train = categorical(T_train)';
+        
         layers = [
             imageInputLayer([29 29 1])
             convolution2dLayer(5, 20)
@@ -122,7 +132,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
             'Verbose',false, ...
             'Plots','training-progress');
 
-        nn = trainNetwork(P_train, T_train, layers, options);
+        nn = trainNetwork(P_train', T_train, layers, options);
 
     end
 end

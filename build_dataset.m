@@ -2,7 +2,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
 
     %% LOAD DATASET
     %  PATIENT 1
-    if strcmp(dataset, "1") == 0
+    if strcmp(dataset, "1")
         data = load("Datasets/112502.mat");
     % PATIENT 2
     else
@@ -73,7 +73,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
         P = feat1.';
     else
         P = data.FeatVectSel;
-    end 
+    end
 
     %% Define the Training set and the Testing set
     if class_balancing == 1
@@ -82,18 +82,13 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
 
         [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
         
-        % Training set
         P_train = P(trainInd, :);
         T_train = T2(trainInd, :);
         
-        % Test set
-        P_test = P(testInd, :)';
-        T_test = T2(testInd, :)';
-        
         [P_train, T_train] = class_balance(P_train, T_train, data.Trg, train_ratio);
         
-        P_train =  P_train';
-        T_train = T_train';
+        P_test = P(testInd, :)';
+        T_test = T2(testInd, :)';
         
     % No Class Balancing
     else
@@ -111,7 +106,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
             Q = length(P);
 
             [trainInd, testInd] = divideblock(Q, train_ratio,  1 - train_ratio);
-
+            
             % Training set
             P_train = P(trainInd, :)';
             T_train = T2(trainInd, :)';
@@ -119,6 +114,7 @@ function [P_train, P_test, T_train, T_test] = build(dataset, features, train_rat
             % Test set
             P_test = P(testInd, :)';
             T_test = T2(testInd, :)';
+            
         end
     end
 end
