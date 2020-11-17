@@ -1,15 +1,29 @@
 function [prediction_results, detection_results]  = testing(nn, P_test, T_test, classification, type)
         
     %% Treatment for Deep NN
-    if strcmp(type, "LSTM") || strcmp(type, "CNN")
-        
+    if strcmp(type, "LSTM")
         P_test = num2cell(P_test, 1);
         miniBatchSize = 29;
         T_Pred = classify(nn, P_test, ...
             'MiniBatchSize', miniBatchSize, ...
             'SequenceLength', 'longest');
         
-        res = zeros(length(T_Pred), 4);
+        res = zeros(length(T_Pred), 3);
+        for i = 1 : length(T_Pred)
+            res(i, T_Pred(i)) = 1;
+        end
+        
+        res = res';
+    elseif strcmp(type, "CNN")
+        
+        [P_test, ~] = convert_vector_4d(P_test, T_test);
+        
+        miniBatchSize = 29;
+        T_Pred = classify(nn, P_test, ...
+            'MiniBatchSize', miniBatchSize, ...
+            'SequenceLength', 'longest');
+        
+        res = zeros(length(T_Pred), 3);
         for i = 1 : length(T_Pred)
             res(i, T_Pred(i)) = 1;
         end

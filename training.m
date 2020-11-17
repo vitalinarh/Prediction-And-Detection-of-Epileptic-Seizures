@@ -80,7 +80,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         numHiddenUnits = 10;
         numClasses = 4;
         miniBatchSize = 27;
-        maxEpochs = 20;
+        maxEpochs = 50;
         
         layers = [ ...
             sequenceInputLayer(numFeatures)
@@ -103,18 +103,12 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
     else
         disp("CNN")
-        miniBatchSize = 29;
+        miniBatchSize = 27;
+        maxEpochs = 50;
         
-        class1Ind = T_train(1, :) == 1;
-        class2Ind = T_train(2, :) == 1;
-        class3Ind = T_train(3, :) == 1;
+        [P_train, T_train] = convert_vector_4d(P_train, T_train);
         
-        T_train = zeros(1, length(T_train)); 
-        T_train(class1Ind) = 1;
-        T_train(class2Ind) = 2;
-        T_train(class3Ind) = 3;
-        
-        T_train = categorical(T_train)';
+        T_train = categorical(T_train);
         
         layers = [
             imageInputLayer([29 29 1])
@@ -128,11 +122,11 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
 
         options = trainingOptions('adam',...
             'MiniBatchSize',miniBatchSize, ...
-            'MaxEpochs',4, ...
+            'MaxEpochs', maxEpochs, ...
             'Verbose',false, ...
             'Plots','training-progress');
 
-        nn = trainNetwork(P_train', T_train, layers, options);
+        nn = trainNetwork(P_train, T_train, layers, options);
 
     end
 end
