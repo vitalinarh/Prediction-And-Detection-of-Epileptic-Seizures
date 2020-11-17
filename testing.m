@@ -51,11 +51,11 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
             counter = 0;
             for j = i : i + threshold
                 % check if is equal to the next point
-                if res(:, i) == res(:, j)
+                if res(:, i) == 1
                     counter = counter + 1;
                 end
             end
-            % didn't reach the , make it interictal
+            % didn't reach the threshold, make it interictal
             if(counter < consecutives)
                 res(1, i) = 1;
                 res(2, i) = 0;
