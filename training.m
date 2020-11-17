@@ -41,9 +41,9 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         disp("Multilayer")
         net = feedforwardnet(neurons, 'traingd');
         net.divideFcn = 'divideblock';
-        net.divideParam.trainRatio = 0.90;
-        net.divideParam.valRatio = 0.10; 
-        net.divideParam.testRatio = 0.0; 
+        net.divideParam.trainRatio = 0.70;
+        net.divideParam.valRatio = 0.15; 
+        net.divideParam.testRatio = 0.15; 
         net.trainParam.epochs = 1000;
         nn = train(net, P_train, T_train, [], [], wp, 'UseParallel', 'no', 'UseGPU', 'no');
         
@@ -55,7 +55,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         net.divideParam.valRatio = 0.10;
         net.divideParam.testRatio = 0;
         net.trainParam.epochs = 1000;
-        nn = train(net, P_train, T_train, [], [], 'useParallel', 'no', 'useGPU', 'no', 'showResources', 'no');
+        nn = train(net, P_train, T_train, [], [], 'useParallel', 'no', 'useGPU', 'no');
         
     elseif strcmp(type, "LSTM") 
         % Set up the cell arrays for training

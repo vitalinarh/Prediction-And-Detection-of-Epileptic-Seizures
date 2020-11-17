@@ -9,8 +9,6 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
             'MiniBatchSize', miniBatchSize, ...
             'SequenceLength', 'longest');
         
-        size(T_Pred)
-        
         res = zeros(length(T_Pred), 4);
         for i = 1 : length(T_Pred)
             res(i, T_Pred(i)) = 1;
@@ -60,8 +58,8 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
             % didn't reach the , make it interictal
             if(counter < consecutives)
                 res(1, i) = 1;
-                res(2, i) = 1;
-                res(3, i) = 1;
+                res(2, i) = 0;
+                res(3, i) = 0;
             end
         end
     end

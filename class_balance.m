@@ -1,4 +1,4 @@
-function [P_train, T_train] = class_balance(P, T2, Trg, train_ratio)
+function [P_train, T_train] = class_balance(P, T2)
 
     interictal_indexes = find(T2(:, 1) == 1);
     preictal_indexes = find(T2(:, 2) == 1);
