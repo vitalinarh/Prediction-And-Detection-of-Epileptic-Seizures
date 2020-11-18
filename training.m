@@ -112,9 +112,23 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
         layers = [
             imageInputLayer([29 29 1])
-            convolution2dLayer(5, 20)
+            
+            convolution2dLayer(3, 8, 'Padding', 'same')
+            batchNormalizationLayer
             reluLayer
+            
             maxPooling2dLayer(2, 'Stride', 2)
+            
+            convolution2dLayer(3, 16, 'Padding', 'same')
+            batchNormalizationLayer
+            reluLayer
+            
+            maxPooling2dLayer(2, 'Stride', 2)
+            
+            convolution2dLayer(3,32,'Padding','same')
+            batchNormalizationLayer
+            reluLayer
+                
             fullyConnectedLayer(3)
             softmaxLayer
             classificationLayer
@@ -123,8 +137,8 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         options = trainingOptions('adam',...
             'MiniBatchSize',miniBatchSize, ...
             'MaxEpochs', maxEpochs, ...
-            'Verbose',false, ...
-            'Plots','training-progress');
+            'Verbose', false, ...
+            'Plots', 'training-progress');
 
         nn = trainNetwork(P_train, T_train, layers, options);
 

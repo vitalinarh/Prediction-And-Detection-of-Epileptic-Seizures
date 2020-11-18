@@ -2,6 +2,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
         
     %% Treatment for Deep NN
     if strcmp(type, "LSTM")
+        
         P_test = num2cell(P_test, 1);
         miniBatchSize = 29;
         T_Pred = classify(nn, P_test, ...
@@ -18,7 +19,7 @@ function [prediction_results, detection_results]  = testing(nn, P_test, T_test, 
         
         [P_test, ~] = convert_vector_4d(P_test, T_test);
         
-        miniBatchSize = 29;
+        miniBatchSize = 27;
         T_Pred = classify(nn, P_test, ...
             'MiniBatchSize', miniBatchSize, ...
             'SequenceLength', 'longest');
