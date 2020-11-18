@@ -49,7 +49,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         
     elseif strcmp(type, "Recurrent")
         disp("Recurrent")
-        net = layrecnet(1 : 2, neurons, "trainscg");
+        net = layrecnet(1 : 2, neurons, "trainlm");
         net.divideFcn = 'divideblock';
         net.divideParam.trainRatio = 0.90;
         net.divideParam.valRatio = 0.10;
