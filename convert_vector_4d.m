@@ -1,9 +1,9 @@
 function [P_train2, T_train2] = convert_vector_4d(P_train, T_train)
 
     % Indexes of each class
-    class1Ind = T_train(1, :) == 1;
-    class2Ind = T_train(2, :) == 1;
-    class3Ind = T_train(3, :) == 1;
+    class1Ind = find(T_train(1, :) == 1);
+    class2Ind = find(T_train(2, :) == 1);
+    class3Ind = find(T_train(3, :) == 1);
     
     num_Img = 1;
     % CONVERT P_train INTO A 4D MATRIX

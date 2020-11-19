@@ -63,9 +63,9 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
         % create a 1-by-length(P_train) cell array, where each cell contains a 29-by-1 column of P_train.
         P_train = num2cell(P_train, 1);
         
-        class1Ind = T_train(1, :) == 1;
-        class2Ind = T_train(2, :) == 1;
-        class3Ind = T_train(3, :) == 1;
+        class1Ind = find(T_train(1, :) == 1);
+        class2Ind = find(T_train(2, :) == 1);
+        class3Ind = find(T_train(3, :) == 1);
         
         T_train = zeros(1, length(T_train)); 
         T_train(class1Ind) = 1;
@@ -134,7 +134,7 @@ function nn = training(P_train, T_train, type, neurons, is_prediction, spec, cla
             classificationLayer
         ];
 
-        options = trainingOptions('adam',...
+        options = trainingOptions('sgdm',...
             'MiniBatchSize',miniBatchSize, ...
             'MaxEpochs', maxEpochs, ...
             'Verbose', false, ...
